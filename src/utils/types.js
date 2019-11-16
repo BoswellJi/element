@@ -6,6 +6,7 @@ export function isObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
 
+// 节点类型
 export function isHtmlElement(node) {
   return node && node.nodeType === Node.ELEMENT_NODE;
 }

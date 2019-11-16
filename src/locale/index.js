@@ -37,6 +37,7 @@ export const t = function(path, options) {
   return '';
 };
 
+// 设置使用的语言（默认中文简体
 export const use = function(l) {
   lang = l || lang;
 };

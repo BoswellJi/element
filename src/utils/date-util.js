@@ -48,11 +48,13 @@ export const parseDate = function(string, format) {
 };
 
 export const getDayCountOfMonth = function(year, month) {
+  //因为js中获取的月份要跟实际月份少一个月
   if (month === 3 || month === 5 || month === 8 || month === 10) {
     return 30;
   }
 
   if (month === 1) {
+    // 闰年29，平年28  普通闰年，世纪闰年
     if (year % 4 === 0 && year % 100 !== 0 || year % 400 === 0) {
       return 29;
     } else {
