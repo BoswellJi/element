@@ -166,34 +166,22 @@ const components = [
   CollapseTransition
 ];
 
-/**
- * 
- * @param {*} Vue  Vue 类
- * @param {*} opts 配置参数
- */
 const install = function(Vue, opts = {}) {
-  // 本地化
   locale.use(opts.locale);
-  // 国际化
   locale.i18n(opts.i18n);
 
-  // 全局注册组件
   components.forEach(component => {
-    // 根据组件实例的name属性，以及组件实例
     Vue.component(component.name, component);
   });
 
-  // 自动注册插件
   Vue.use(InfiniteScroll);
   Vue.use(Loading.directive);
 
-  // 给Vue原型添加属性
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
     zIndex: opts.zIndex || 2000
   };
 
-  // 给Vue原型添加对象，或者方法，简便开发（都是弹框
   Vue.prototype.$loading = Loading.service;
   Vue.prototype.$msgbox = MessageBox;
   Vue.prototype.$alert = MessageBox.alert;
@@ -205,7 +193,6 @@ const install = function(Vue, opts = {}) {
 };
 
 /* istanbul ignore if */
-// script 脚本引入时候的组件安装
 if (typeof window !== 'undefined' && window.Vue) {
   install(window.Vue);
 }
