@@ -23,6 +23,8 @@ module.exports = {
     alias: config.alias,
     modules: ['node_modules']
   },
+  // 提供了从bundle中排除依赖的方法
+  // 外部已经提供了依赖对象,不要再把依赖打包进bundle
   externals: config.externals,
   performance: {
     hints: false

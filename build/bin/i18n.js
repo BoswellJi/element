@@ -2,10 +2,12 @@
 
 var fs = require('fs');
 var path = require('path');
+// 国际化配置文件
 var langConfig = require('../../examples/i18n/page.json');
 
 langConfig.forEach(lang => {
   try {
+    // 获取对应语言的页面
     fs.statSync(path.resolve(__dirname, `../../examples/pages/${ lang.lang }`));
   } catch (e) {
     fs.mkdirSync(path.resolve(__dirname, `../../examples/pages/${ lang.lang }`));

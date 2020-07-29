@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+// 在demo的webpack配置的基础上,添加拓展配置
 demoConfig.entry = {
   background: path.join(process.cwd(), './examples/extension/src/background'),
   entry: path.join(process.cwd(), './examples/extension/src/entry')

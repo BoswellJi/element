@@ -3,7 +3,9 @@
 var postcss = require('postcss');
 var fs = require('fs');
 var path = require('path');
+// 以utf8的编码格式读取，默认主体的样式文件
 var fontFile = fs.readFileSync(path.resolve(__dirname, '../../packages/theme-chalk/src/icon.scss'), 'utf8');
+// 解析scss样式
 var nodes = postcss.parse(fontFile).nodes;
 var classList = [];
 

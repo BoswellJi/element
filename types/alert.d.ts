@@ -1,3 +1,5 @@
+// 模块类型的类型定义文件
+
 import { ElementUIComponent } from './component'
 
 export type AlertType = 'success' | 'warning' | 'info' | 'error'

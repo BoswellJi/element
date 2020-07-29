@@ -91,6 +91,7 @@
       },
       model: {
         get() {
+          // 是 一组 还是 一个
           return this.isGroup ? this._radioGroup.value : this.value;
         },
         set(val) {

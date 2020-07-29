@@ -71,6 +71,7 @@
 
     methods: {
       handleClick(evt) {
+        console.log(evt);
         this.$emit('click', evt);
       }
     }
