@@ -33,15 +33,22 @@
    * @class fecha
    */
   var fecha = {};
+  // \1 匹配最后第1个子 捕获匹配 的字符串
+  // dddd | MMMM | yyyy | SSS | Do | ZZ | HH | a"''" | '""'
   var token = /d{1,4}|M{1,4}|yy(?:yy)?|S{1,3}|Do|ZZ|([HhMsDm])\1?|[aA]|"[^"]*"|'[^']*'/g;
+  // \d\d | \d\
   var twoDigits = '\\d\\d?';
+  // \ddd
   var threeDigits = '\\d{3}';
+  // \dddd
   var fourDigits = '\\d{4}';
+  // 
   var word = '[^\\s]+';
   var literal = /\[([^]*?)\]/gm;
   var noop = function () {
   };
 
+  // 正则避免
   function regexEscape(str) {
     return str.replace( /[|\\{()[^$+*?.-]/g, '\\$&');
   }

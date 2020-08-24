@@ -4,7 +4,7 @@ import { isString, isObject } from 'element-ui/src/utils/types';
 // 缓存方法，查看对象是否存在实例属性
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-export function noop() {};
+export function noop() { };
 
 export function hasOwn(obj, key) {
   return hasOwnProperty.call(obj, key);
@@ -29,7 +29,12 @@ export function toObject(arr) {
   return res;
 };
 
-export const getValueByPath = function(object, prop) {
+/**
+ * 通过path获取value
+ * @param {*} object {name:{age:abc:{}}}
+ * @param {*} prop 'name.age.abc'
+ */
+export const getValueByPath = function (object, prop) {
   prop = prop || '';
   const paths = prop.split('.');
   let current = object;
@@ -47,17 +52,29 @@ export const getValueByPath = function(object, prop) {
   return result;
 };
 
+/**
+ * 通过path获取prop
+ * @param {*} obj {name:{age:abc:{}}}
+ * @param {*} path [name][age][acc]
+ * @param {*} strict 
+ */
 export function getPropByPath(obj, path, strict) {
   let tempObj = obj;
+  // [ 一个或多个 字母，数字，下划线 ] [name] =》 .name
   path = path.replace(/\[(\w+)\]/g, '.$1');
+  // 开头是 .name.age.abc' , 替换为 name.age.abc
   path = path.replace(/^\./, '');
 
+  // 获取属性key的数组  name.age.abc
   let keyArr = path.split('.');
   let i = 0;
+  //  3 i<2  ['name','age', 'abc']
   for (let len = keyArr.length; i < len - 1; ++i) {
     if (!tempObj && !strict) break;
     let key = keyArr[i];
+    // 对象上有属性
     if (key in tempObj) {
+      // 获取属性的值,获取倒数二个属性值
       tempObj = tempObj[key];
     } else {
       if (strict) {
@@ -67,14 +84,17 @@ export function getPropByPath(obj, path, strict) {
     }
   }
   return {
+    // 获取最后一个属性的值
     o: tempObj,
+    // 获取最后一个属性key
     k: keyArr[i],
+    // 获取最后一个属性值
     v: tempObj ? tempObj[keyArr[i]] : null
   };
 };
 
 // 生成id,随机数*10000 [0,1)
-export const generateId = function() {
+export const generateId = function () {
   return Math.floor(Math.random() * 10000);
 };
 
@@ -96,11 +116,11 @@ export const valueEquals = (a, b) => {
   return true;
 };
 
-// 
+// 避免正则字符串 ： 指定的字符 | \ {} () [] ^ $ + * ? .       整个被匹配的字符出 $&
 export const escapeRegexpString = (value = '') => String(value).replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 
-// TODO: use native Array.find, Array.findIndex when IE support is dropped
-export const arrayFindIndex = function(arr, pred) {
+// TODO: use native Array.find, Array.findIndex when IE support is dropped ie支持被取消
+export const arrayFindIndex = function (arr, pred) {
   for (let i = 0; i !== arr.length; ++i) {
     if (pred(arr[i])) {
       return i;
@@ -109,13 +129,19 @@ export const arrayFindIndex = function(arr, pred) {
   return -1;
 };
 
-export const arrayFind = function(arr, pred) {
+/**
+ * 数组的find方法 polyfill
+ * @param {*} arr 数组
+ * @param {*} pred 
+ */
+export const arrayFind = function (arr, pred) {
   const idx = arrayFindIndex(arr, pred);
   return idx !== -1 ? arr[idx] : undefined;
 };
 
 // coerce truthy value to array
-export const coerceTruthyValueToArray = function(val) {
+// 强转真值为数组
+export const coerceTruthyValueToArray = function (val) {
   if (Array.isArray(val)) {
     return val;
   } else if (val) {
@@ -126,22 +152,22 @@ export const coerceTruthyValueToArray = function(val) {
 };
 
 //判断ie浏览器
-export const isIE = function() {
+export const isIE = function () {
   return !Vue.prototype.$isServer && !isNaN(Number(document.documentMode));
 };
 
 // edge浏览器
-export const isEdge = function() {
+export const isEdge = function () {
   return !Vue.prototype.$isServer && navigator.userAgent.indexOf('Edge') > -1;
 };
 
 // 火狐浏览器
-export const isFirefox = function() {
+export const isFirefox = function () {
   return !Vue.prototype.$isServer && !!window.navigator.userAgent.match(/firefox/i);
 };
 
 //'transform', 'transition', 'animation'属性添加前缀
-export const autoprefixer = function(style) {
+export const autoprefixer = function (style) {
   if (typeof style !== 'object') return style;
   const rules = ['transform', 'transition', 'animation'];
   const prefixes = ['ms-', 'webkit-'];
@@ -156,40 +182,69 @@ export const autoprefixer = function(style) {
   return style;
 };
 
-// 大写字母变为-连接符
-export const kebabCase = function(str) {
+/**
+ * 大写字母变为-连接符
+ * @param {*} str bacName -> bac-name
+ */
+export const kebabCase = function (str) {
+  // 非-字符 + A-Z (两个字符的匹配)
   const hyphenateRE = /([^-])([A-Z])/g;
   return str
+    // 'acbName' => acb-Name
     .replace(hyphenateRE, '$1-$2')
-    .replace(hyphenateRE, '$1-$2')
+    // .replace(hyphenateRE, '$1-$2')
     .toLowerCase();
 };
 
-export const capitalize = function(str) {
+/**
+ * 转大写
+ * @param {*} str 
+ */
+export const capitalize = function (str) {
+  // 不是字符串
   if (!isString(str)) return str;
+  // 第一个字符转大写
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-export const looseEqual = function(a, b) {
+/**
+ * 宽松的比较
+ * @param {*} a 
+ * @param {*} b 
+ */
+export const looseEqual = function (a, b) {
+  // 是否是纯对象
   const isObjectA = isObject(a);
   const isObjectB = isObject(b);
+  // 都是对象
   if (isObjectA && isObjectB) {
+    // 序列化后比较,是否相等(递归比较)
     return JSON.stringify(a) === JSON.stringify(b);
+    // 都不是对象
   } else if (!isObjectA && !isObjectB) {
+    // 转成字符串比较
     return String(a) === String(b);
   } else {
+    // 一个是对象,一个不是 
     return false;
   }
 };
 
-export const arrayEquals = function(arrayA, arrayB) {
+/**
+ * 数组相等
+ * @param {*} arrayA 
+ * @param {*} arrayB 
+ */
+export const arrayEquals = function (arrayA, arrayB) {
   arrayA = arrayA || [];
   arrayB = arrayB || [];
 
+  // 长度不等,直接返回
   if (arrayA.length !== arrayB.length) {
     return false;
   }
 
+  // 一个元素一个元素的比较
   for (let i = 0; i < arrayA.length; i++) {
     if (!looseEqual(arrayA[i], arrayB[i])) {
       return false;
@@ -199,21 +254,33 @@ export const arrayEquals = function(arrayA, arrayB) {
   return true;
 };
 
-export const isEqual = function(value1, value2) {
+/**
+ * 是否相等
+ * @param {*} value1 
+ * @param {*} value2 
+ */
+export const isEqual = function (value1, value2) {
+  // 都是数字
   if (Array.isArray(value1) && Array.isArray(value2)) {
+    // 数组比较
     return arrayEquals(value1, value2);
   }
+  // 比较
   return looseEqual(value1, value2);
 };
 
-export const isEmpty = function(val) {
-  // null or undefined null==undefined       null, undefined        !=        0 '' false
+/**
+ * 是否变量是否为空
+ * @param {*} val 
+ */
+export const isEmpty = function (val) {
+  // null or undefined
   if (val == null) return true;
-
+  // 布尔类型
   if (typeof val === 'boolean') return false;
-
+  // 数值类型 0
   if (typeof val === 'number') return !val;
-
+  // Error类型 是否存在错误信息
   if (val instanceof Error) return val.message === '';
 
   // 获取对象的toString()方法
@@ -238,9 +305,14 @@ export const isEmpty = function(val) {
   return false;
 };
 
+/**
+ * 帧节流
+ * @param {*} fn 
+ */
 export function rafThrottle(fn) {
   let locked = false;
-  return function(...args) {
+  return function (...args) {
+    // 上一个没有执行完,下一个不能进
     if (locked) return;
     locked = true;
     window.requestAnimationFrame(_ => {

@@ -3,7 +3,9 @@ import {
   PopupManager
 } from 'element-ui/src/utils/popup';
 
+// 服务器端 加载空函数
 const PopperJS = Vue.prototype.$isServer ? function() {} : require('./popper');
+// 停止冒泡
 const stop = e => e.stopPropagation();
 
 /**

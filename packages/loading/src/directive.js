@@ -3,14 +3,19 @@ import Loading from './loading.vue';
 import { addClass, removeClass, getStyle } from 'element-ui/src/utils/dom';
 import { PopupManager } from 'element-ui/src/utils/popup';
 import afterLeave from 'element-ui/src/utils/after-leave';
+// 子类
 const Mask = Vue.extend(Loading);
 
 const loadingDirective = {};
 loadingDirective.install = Vue => {
+  // 非服务端
   if (Vue.prototype.$isServer) return;
+  // 切换loading指令，展示，消失
   const toggleLoading = (el, binding) => {
+    // 指令绑定的表达式变量
     if (binding.value) {
       Vue.nextTick(() => {
+        // 指令的描述信息
         if (binding.modifiers.fullscreen) {
           el.originalPosition = getStyle(document.body, 'position');
           el.originalOverflow = getStyle(document.body, 'overflow');
@@ -58,6 +63,7 @@ loadingDirective.install = Vue => {
       el.instance.hiding = true;
     }
   };
+  // 插入dom指令
   const insertDom = (parent, el, binding) => {
     if (!el.domVisible && getStyle(el, 'display') !== 'none' && getStyle(el, 'visibility') !== 'hidden') {
       Object.keys(el.maskStyle).forEach(property => {
@@ -87,13 +93,17 @@ loadingDirective.install = Vue => {
     }
   };
 
+  // 指令
   Vue.directive('loading', {
     bind: function(el, binding, vnode) {
+      // 获取dom对象上的html属性
       const textExr = el.getAttribute('element-loading-text');
       const spinnerExr = el.getAttribute('element-loading-spinner');
       const backgroundExr = el.getAttribute('element-loading-background');
       const customClassExr = el.getAttribute('element-loading-custom-class');
+      // 父组件
       const vm = vnode.context;
+      // 面罩
       const mask = new Mask({
         el: document.createElement('div'),
         data: {

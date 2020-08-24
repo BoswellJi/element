@@ -9,36 +9,55 @@ export default {
   },
   props: {
     type: String,
+    // 文件上传的地址
     action: {
       type: String,
       required: true
     },
+    // 文件字段名
     name: {
       type: String,
       default: 'file'
     },
+    // 上传时附带的额外信息
     data: Object,
+    // 上传的请求头字段
     headers: Object,
+    // 支持发送cookie
     withCredentials: Boolean,
+    // 支持多文件
     multiple: Boolean,
+    // 接收的上传文件类型
     accept: String,
+    // 上传开始
     onStart: Function,
+    // 上传进度
     onProgress: Function,
+    // 成功
     onSuccess: Function,
+    // 错误
     onError: Function,
+    // 上传之前
     beforeUpload: Function,
+    // 是否可拖拽
     drag: Boolean,
+    // 预览
     onPreview: {
       type: Function,
       default: function() {}
     },
+    // 移除
     onRemove: {
       type: Function,
       default: function() {}
     },
+    // 文件列表
     fileList: Array,
+    // 自动上传
     autoUpload: Boolean,
+    // 列表类型
     listType: String,
+    // 
     httpRequest: {
       type: Function,
       default: ajax
@@ -197,10 +216,13 @@ export default {
     };
     data.class[`el-upload--${listType}`] = true;
     return (
+      // 拖拽
       <div {...data} tabindex="0" >
         {
           drag
+            // 可拖拽上传
             ? <upload-dragger disabled={disabled} on-file={uploadFiles}>{this.$slots.default}</upload-dragger>
+            // 默认元素
             : this.$slots.default
         }
         <input class="el-upload__input" type="file" ref="input" name={name} on-change={handleChange} multiple={multiple} accept={accept}></input>

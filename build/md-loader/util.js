@@ -2,7 +2,9 @@ const { compileTemplate } = require('@vue/component-compiler-utils');
 const compiler = require('vue-template-compiler');
 
 function stripScript(content) {
+  // <script> 122323<script>
   const result = content.match(/<(script)>([\s\S]+)<\/\1>/);
+  // 获取第二个组合匹配中的字符串
   return result && result[2] ? result[2].trim() : '';
 }
 
@@ -20,10 +22,17 @@ function stripTemplate(content) {
   return content.replace(/<(script|style)[\s\S]+<\/\1>/g, '').trim();
 }
 
+/**
+ * 
+ * @param {*} source 字符串
+ */
 function pad(source) {
   return source
+  //  正则: 回车符一个或者多个一个换行符
     .split(/\r?\n/)
+    // 在每个元素前加一个空格
     .map(line => `  ${line}`)
+    // 用换行符将每个元素连接
     .join('\n');
 }
 

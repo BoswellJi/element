@@ -6,6 +6,7 @@ Vue.directive('popover', directive);
 
 /* istanbul ignore next */
 Popover.install = function(Vue) {
+  // 注册指令与组件
   Vue.directive('popover', directive);
   Vue.component(Popover.name, Popover);
 };

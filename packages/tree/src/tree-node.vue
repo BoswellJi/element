@@ -57,6 +57,7 @@
         role="group"
         :aria-expanded="expanded"
       >
+      <!-- 组件实例递归自身 -->
         <el-tree-node
           :render-content="renderContent"
           v-for="child in node.childNodes"
@@ -78,24 +79,29 @@
   import { getNodeKey } from './model/util';
 
   export default {
+    // 组件名
     name: 'ElTreeNode',
-
+    // 组件名
     componentName: 'ElTreeNode',
 
     mixins: [emitter],
 
     props: {
+      //  childNodes，id等字段， 树根节点
       node: {
         default() {
           return {};
         }
       },
+      // label children 字段的标识符
       props: {},
       renderContent: Function,
+      // 展开后在渲染
       renderAfterExpand: {
         type: Boolean,
         default: true
       },
+      // 展示复选框
       showCheckbox: {
         type: Boolean,
         default: false
@@ -103,8 +109,11 @@
     },
 
     components: {
+      // 过渡组件
       ElCollapseTransition,
+      // 复选框组件
       ElCheckbox,
+      // 节点内容组件
       NodeContent: {
         props: {
           node: {
@@ -112,9 +121,13 @@
           }
         },
         render(h) {
+          // 获取实例组件的父组件实例
           const parent = this.$parent;
+          // 获取父组件的tree属性
           const tree = parent.tree;
+          // 获取node {label:'',children:[]}
           const node = this.node;
+          // 获取节点中的 data 和 store 
           const { data, store } = node;
           return (
             parent.renderContent
@@ -130,18 +143,22 @@
     data() {
       return {
         tree: null,
+        // 展开
         expanded: false,
+        // 子节点被渲染
         childNodeRendered: false,
+        // 
         oldChecked: null,
         oldIndeterminate: null
       };
     },
 
     watch: {
+      // 中间节点
       'node.indeterminate'(val) {
         this.handleSelectChange(this.node.checked, val);
       },
-
+      // 节点是否被选中
       'node.checked'(val) {
         this.handleSelectChange(val, this.node.indeterminate);
       },
@@ -155,10 +172,15 @@
     },
 
     methods: {
+      /**
+       * 获取节点key
+       */
       getNodeKey(node) {
         return getNodeKey(this.tree.nodeKey, node.data);
       },
-
+      /**
+       * 处理select的change事件
+       */
       handleSelectChange(checked, indeterminate) {
         if (this.oldChecked !== checked && this.oldIndeterminate !== indeterminate) {
           this.tree.$emit('check-change', this.node.data, checked, indeterminate);

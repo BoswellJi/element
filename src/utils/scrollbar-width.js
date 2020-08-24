@@ -14,7 +14,9 @@ export default function() {
   outer.style.top = '-9999px';
   document.body.appendChild(outer);
 
+  // 元素的宽度
   const widthNoScroll = outer.offsetWidth;
+  // 元素设置移除滚动
   outer.style.overflow = 'scroll';
 
   const inner = document.createElement('div');

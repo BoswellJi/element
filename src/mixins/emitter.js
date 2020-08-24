@@ -1,14 +1,14 @@
 function broadcast(componentName, eventName, params) {
-  // 组件的子组件
+  // 组件的子组件，当前组件的子组件，进行遍历
   this.$children.forEach(child => {
     // 获取组件的名称
     var name = child.$options.componentName;
-
     // 子组件名称和当前组件名称一致
     if (name === componentName) {
-      // 调用组件
+      // 调用组件的发射事件方法
       child.$emit.apply(child, [eventName].concat(params));
     } else {
+      // 不相等，在调用子组件的子组件进行判断
       broadcast.apply(child, [componentName, eventName].concat([params]));
     }
   });
@@ -49,7 +49,7 @@ export default {
      * @param {*} params 参数
      */
     broadcast(componentName, eventName, params) {
-      // 
+      // 广播 this是当前组件实例， 组件名， 事件名， 参数
       broadcast.call(this, componentName, eventName, params);
     }
   }

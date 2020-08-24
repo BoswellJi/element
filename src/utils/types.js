@@ -16,10 +16,12 @@ export const isFunction = (functionToCheck) => {
   return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 };
 
+// 是否时undefined类型
 export const isUndefined = (val)=> {
   return val === void 0;
 };
 
+// 不为空说明变量被定义
 export const isDefined = (val) => {
   return val !== undefined && val !== null;
 };
