@@ -230,7 +230,7 @@ export const isScroll = (el, vertical) => {
   if (isServer) return;
   // 确定滚动方向 (等于null同时也要等于undefined)
   const determinedDirection = vertical !== null || vertical !== undefined;
-  // 
+   
   const overflow = determinedDirection
     ? vertical
       ? getStyle(el, 'overflow-y')
@@ -240,6 +240,11 @@ export const isScroll = (el, vertical) => {
   return overflow.match(/(scroll|auto)/);
 };
 
+/**
+ * 获取滚动元素的容器
+ * @param {*} el 
+ * @param {*} vertical 垂直
+ */
 export const getScrollContainer = (el, vertical) => {
   if (isServer) return;
 

@@ -5,7 +5,7 @@ import { PopupManager } from 'element-ui/src/utils/popup';
 import afterLeave from 'element-ui/src/utils/after-leave';
 import merge from 'element-ui/src/utils/merge';
 
-// 继承组件类
+// 创建 LoadingVue 类的子类，继承 LoadingVue和Vue类
 const LoadingConstructor = Vue.extend(loadingVue);
 
 const defaults = {
@@ -22,7 +22,7 @@ let fullscreenLoading;
 LoadingConstructor.prototype.originalPosition = '';
 LoadingConstructor.prototype.originalOverflow = '';
 
-LoadingConstructor.prototype.close = function() {
+LoadingConstructor.prototype.close = function () {
   // 全屏幕
   if (this.fullscreen) {
     // 置空
@@ -34,10 +34,10 @@ LoadingConstructor.prototype.close = function() {
     const target = this.fullscreen || this.body
       ? document.body
       : this.target;
-      // 溢出样式
+    // 移除样式
     removeClass(target, 'el-loading-parent--relative');
     removeClass(target, 'el-loading-parent--hidden');
-    // 溢出加载组件
+    // 移除加载组件
     if (this.$el && this.$el.parentNode) {
       this.$el.parentNode.removeChild(this.$el);
     }
@@ -70,7 +70,7 @@ const addStyle = (options, parent, instance) => {
       // 获取遮罩元素的y轴滚动距离
       let scroll = property === 'top' ? 'scrollTop' : 'scrollLeft';
       maskStyle[property] = options.target.getBoundingClientRect()[property] +
-      // 获取body元素的y轴滚动
+        // 获取body元素的y轴滚动
         document.body[scroll] +
         document.documentElement[scroll] +
         'px';
@@ -111,7 +111,7 @@ const Loading = (options = {}) => {
   } else {
     options.body = true;
   }
-  // 全屏加载，缓存加载组件实例
+  // 全屏加载 && 全屏加载组件
   if (options.fullscreen && fullscreenLoading) {
     return fullscreenLoading;
   }
@@ -124,9 +124,9 @@ const Loading = (options = {}) => {
     data: options
   });
 
+  // 添加样式
   addStyle(options, parent, instance);
 
-  console.log(instance);
   // 定位
   if (instance.originalPosition !== 'absolute' && instance.originalPosition !== 'fixed') {
     // 相对定位
@@ -139,11 +139,12 @@ const Loading = (options = {}) => {
   }
   // 将Loading组件添加到dom对象的容器中
   parent.appendChild(instance.$el);
+
   Vue.nextTick(() => {
     // 组件展示
     instance.visible = true;
   });
-  // 是否全屏
+  // 是否全屏，保存全屏的组件实例
   if (options.fullscreen) {
     fullscreenLoading = instance;
   }
