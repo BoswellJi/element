@@ -18,7 +18,9 @@
         <slot>{{ content }}</slot>
       </div>
     </transition>
-    <slot name="reference"></slot>
+    <span class="el-popover__reference-wrapper" ref="wrapper" >
+      <slot name="reference"></slot>
+    </span>
   </span>
 </template>
 <script>
@@ -33,49 +35,36 @@ export default {
   mixins: [Popper],
 
   props: {
-    // 触发的方式
     trigger: {
       type: String,
       default: 'click',
       validator: value => ['click', 'focus', 'hover', 'manual'].indexOf(value) > -1
     },
-    // 打开延时
     openDelay: {
       type: Number,
       default: 0
     },
-    // 关闭延时
     closeDelay: {
       type: Number,
       default: 200
     },
-    // 弹框标题
     title: String,
-    // 不可用
     disabled: Boolean,
-    // 内容
     content: String,
-    // 引用
     reference: {},
-    // popper样式
     popperClass: String,
-    // popper宽度
     width: {},
-    // 展示箭头
     visibleArrow: {
       default: true
     },
-    // 箭头偏移量
     arrowOffset: {
       type: Number,
       default: 0
     },
-    // 过渡样式
     transition: {
       type: String,
       default: 'fade-in-linear'
     },
-    // tab索引
     tabindex: {
       type: Number,
       default: 0
@@ -97,25 +86,19 @@ export default {
   },
 
   mounted() {
-    // 获取dom对象，插槽中的
     let reference = this.referenceElm = this.reference || this.$refs.reference;
-    // popper组件的实例
     const popper = this.popper || this.$refs.popper;
 
-    // 没有组件元素 && 有插槽 && 获取第一个元素
-    if (!reference && this.$slots.reference && this.$slots.reference[0]) {
-      // 重新赋值插槽元素
-      reference = this.referenceElm = this.$slots.reference[0].elm;
+    if (!reference && this.$refs.wrapper.children) {
+      reference = this.referenceElm = this.$refs.wrapper.children[0];
     }
-    // 插槽元素存在
+    // 可访问性
     if (reference) {
-      // 添加样式，属性
       addClass(reference, 'el-popover__reference');
       reference.setAttribute('aria-describedby', this.tooltipId);
       reference.setAttribute('tabindex', this.tabindex); // tab序列
       popper.setAttribute('tabindex', 0);
 
-      // 非click触发
       if (this.trigger !== 'click') {
         on(reference, 'focusin', () => {
           this.handleFocus();
@@ -211,8 +194,8 @@ export default {
       let reference = this.reference || this.$refs.reference;
       const popper = this.popper || this.$refs.popper;
 
-      if (!reference && this.$slots.reference && this.$slots.reference[0]) {
-        reference = this.referenceElm = this.$slots.reference[0].elm;
+      if (!reference && this.$refs.wrapper.children) {
+        reference = this.referenceElm = this.$refs.wrapper.children[0];
       }
       if (!this.$el ||
         !reference ||
