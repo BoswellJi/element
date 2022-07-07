@@ -12,8 +12,11 @@ export default {
   mixins: [Migrating],
 
   components: {
+    // 进度
     ElProgress,
+    // 列表
     UploadList,
+    // 上传
     Upload
   },
 
@@ -108,9 +111,13 @@ export default {
 
   data() {
     return {
+      // 上传列表
       uploadFiles: [],
+
       dragOver: false,
+      // 拖拽中
       draging: false,
+      // 模板索引
       tempIndex: 1
     };
   },
@@ -266,8 +273,9 @@ export default {
   },
 
   render(h) {
+    // 文件列表vnode
     let uploadList;
-
+    // 是否展示文件列表
     if (this.showFileList) {
       uploadList = (
         <UploadList
@@ -319,6 +327,7 @@ export default {
     };
 
     const trigger = this.$slots.trigger || this.$slots.default;
+    // 上传组件
     const uploadComponent = <upload {...uploadData}>{trigger}</upload>;
 
     return (

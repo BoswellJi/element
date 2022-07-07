@@ -34,10 +34,12 @@ const getPositionSize = (el, prop) => {
 };
 
 const getOffsetHeight = el => {
+  // 获取元素的高度
   return getPositionSize(el, 'offsetHeight');
 };
 
 const getClientHeight = el => {
+  // 获取元素的高度
   return getPositionSize(el, 'clientHeight');
 };
 
@@ -84,33 +86,44 @@ const getScrollOptions = (el, vm) => {
   }, {});
 };
 
+// 获取元素距离顶部/或者带有定位属性的父元素的距离
 const getElementTop = el => el.getBoundingClientRect().top;
 
+/**
+ * 处理滚动
+ * @param {*} cb 
+ */
 const handleScroll = function(cb) {
   const { el, vm, container, observer } = this[scope];
   const { distance, disabled } = getScrollOptions(el, vm);
 
   if (disabled) return;
-
+  // 获取元素的尺寸信息
   const containerInfo = container.getBoundingClientRect();
   if (!containerInfo.width && !containerInfo.height) return;
 
   let shouldTrigger = false;
-
+  
   if (container === el) {
     // be aware of difference between clientHeight & offsetHeight & window.getComputedStyle().height
     const scrollBottom = container.scrollTop + getClientHeight(container);
+    // 
     shouldTrigger = container.scrollHeight - scrollBottom <= distance;
   } else {
+    // 获取元素的高度 + 滚动元素距离窗口顶部的高度 - 容器的距离窗口顶部的高度
     const heightBelowTop = getOffsetHeight(el) + getElementTop(el) - getElementTop(container);
+    // 获取元素高度
     const offsetHeight = getOffsetHeight(container);
+    // 
     const borderBottom = Number.parseFloat(getStyleComputedProperty(container, 'borderBottomWidth'));
+    // 容器
     shouldTrigger = heightBelowTop - offsetHeight + borderBottom <= distance;
   }
-
+  // 触底了 && 回调是函数
   if (shouldTrigger && isFunction(cb)) {
     cb.call(vm);
   } else if (observer) {
+    // 清理内存
     observer.disconnect();
     this[scope].observer = null;
   }
@@ -118,21 +131,34 @@ const handleScroll = function(cb) {
 };
 
 export default {
+  // 无缝滚动
   name: 'InfiniteScroll',
+  /**
+   * 替换，被绑定元素插入父节点时调用
+   * @param {*} el 绑定指令的html标签的dom对象vm
+   * @param {*} binding 绑定信息
+   * @param {*} vnode 绑定指令的html标签的vnode对象
+   */
   inserted(el, binding, vnode) {
     const cb = binding.value;
-
+    // vnode的上下文，指的是vnode安装时，挂载到的组Vue实例
     const vm = vnode.context;
-    // only include vertical scroll
+    
+    // only include vertical scroll 
     const container = getScrollContainer(el, true);
     const { delay, immediate } = getScrollOptions(el, vm);
+    // 每次滚动都会加载
     const onScroll = throttle(delay, handleScroll.bind(el, cb));
-
+    // ElInfiniteScroll 
     el[scope] = { el, vm, container, onScroll };
 
+    // 元素存在，添加事件
     if (container) {
-      container.addEventListener('scroll', onScroll);
-
+      container.addEventListener('scroll', ()=>{
+        console.log(1);
+        onScroll()
+      });
+      
       if (immediate) {
         const observer = el[scope].observer = new MutationObserver(onScroll);
         observer.observe(container, { childList: true, subtree: true });

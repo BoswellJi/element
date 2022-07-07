@@ -6,7 +6,9 @@ const TerserPlugin = require('terser-webpack-plugin');
 const config = require('./config');
 
 module.exports = {
-  mode: 'production',
+  // 生产模式
+  mode: 'development',
+  // 入口文件多
   entry: {
     app: ['./src/index.js']
   },
@@ -16,9 +18,13 @@ module.exports = {
     filename: 'index.js',
     chunkFilename: '[id].js',
     libraryTarget: 'umd',
+    // 模块入口导出的值
     libraryExport: 'default',
-    library: 'ELEMENT',
+    // 库的名称
+    library: 'ELEMENTjmz',
+    // 是否给amd模块命名
     umdNamedDefine: true,
+    // 全局对象将被用来安装这个库
     globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
   resolve: {

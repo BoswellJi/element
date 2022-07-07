@@ -1,10 +1,11 @@
+// 组件对应的文件目录
 var Components = require('../../components.json');
 var fs = require('fs');
 var render = require('json-templater/string');
 var uppercamelcase = require('uppercamelcase');
 var path = require('path');
 var endOfLine = require('os').EOL;
-
+// 组件库的导出文件
 var OUTPUT_PATH = path.join(__dirname, '../../src/index.js');
 var IMPORT_TEMPLATE = 'import {{name}} from \'../packages/{{package}}/index.js\';';
 var INSTALL_COMPONENT_TEMPLATE = '  {{name}}';
@@ -87,6 +88,11 @@ ComponentNames.forEach(name => {
   if (componentName !== 'Loading') listTemplate.push(`  ${componentName}`);
 });
 
+/**
+ * 将模板中的插值占位符进行替换
+ * @param {string} 模板
+ * @param {object} 占位符的名称
+ */
 var template = render(MAIN_TEMPLATE, {
   include: includeComponentTemplate.join(endOfLine),
   install: installTemplate.join(',' + endOfLine),

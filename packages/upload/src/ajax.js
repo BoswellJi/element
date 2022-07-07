@@ -28,11 +28,17 @@ function getBody(xhr) {
   }
 }
 
+/**
+ * 上传文件请求
+ * @param {*} option 
+ */
 export default function upload(option) {
+  // xhr对象不存在
   if (typeof XMLHttpRequest === 'undefined') {
     return;
   }
 
+  // 获取action
   const xhr = new XMLHttpRequest();
   const action = option.action;
 
@@ -45,6 +51,7 @@ export default function upload(option) {
     };
   }
 
+  // 表单数据，二进制数据
   const formData = new FormData();
 
   if (option.data) {

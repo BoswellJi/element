@@ -3,6 +3,8 @@ const mdContainer = require('markdown-it-container');
 module.exports = md => {
   md.use(mdContainer, 'demo', {
     validate(params) {
+      // match返回: [整体匹配到的字符串,$0,$1,index.input]
+      // 正则: 以demo+空白字符(0个或者多个+任何字符(0次多多次)
       return params.trim().match(/^demo\s*(.*)$/);
     },
     render(tokens, idx) {

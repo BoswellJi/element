@@ -7,50 +7,62 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const launchEditorMiddleware = require('launch-editor-middleware');
 
 const config = require('./config');
 
+// 进程环境变量
 const isProd = process.env.NODE_ENV === 'production';
+// PLAY_ENV=='true' 获取的是字符串
 const isPlay = !!process.env.PLAY_ENV;
 
 const webpackConfig = {
+  // webpack的模式，开启对应每个环境下内置的优化
   mode: process.env.NODE_ENV,
+  // 模块入口
   entry: isProd ? {
     docs: './examples/entry.js'
   } : (isPlay ? './examples/play.js' : './examples/entry.js'),
+  // 打包出口
   output: {
+    // 输出路径
     path: path.resolve(process.cwd(), './examples/element-ui/'),
+    // 
     publicPath: process.env.CI_ENV || '',
-    filename: '[name].[hash:7].js',
+    // 每个输出的bundle的名称
+    filename: '[name].[hash:2].js',
+    // 提取的公共代码块文件
     chunkFilename: isProd ? '[name].[hash:7].js' : '[name].js'
   },
+  // 分解
   resolve: {
+    // 尝试解析这些文件后缀
     extensions: ['.js', '.vue', '.json'],
+    // 创建模块的别名
     alias: config.alias,
+    // 告诉webpack解析模块时，应该搜索的目录
     modules: ['node_modules']
   },
+  // 开发服务器
   devServer: {
+    // 主机名
     host: '0.0.0.0',
+    // 端口
     port: 8085,
+    // 打包文件在服务器下的路径
     publicPath: '/',
-    hot: true,
-    before: (app) => {
-      /*
-       * 编辑器类型 :此处的指令表示的时各个各个编辑器在cmd或terminal中的命令
-       * webstorm
-       * code // vscode
-       * idea
-      */
-      app.use('/__open-in-editor', launchEditorMiddleware('code'));
-    }
+    // 模块而替换
+    hot: true
   },
+  // 性能
   performance: {
+    // 不展示错误,警告提示
     hints: false
   },
+  // 更精确的控制bundle信息的展示
   stats: {
     children: false
   },
+  // 模块,规定加载的模块的解析规则
   module: {
     rules: [
       {
@@ -109,6 +121,7 @@ const webpackConfig = {
       }
     ]
   },
+  // 插件
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
@@ -132,13 +145,16 @@ const webpackConfig = {
       }
     })
   ],
+  // 优化,会根据选择的mode来执行不同的优化
   optimization: {
     minimizer: []
   },
+  // 控制是否生成,以及如何生成 source-map
   devtool: '#eval-source-map'
 };
 
 if (isProd) {
+  // 排除bundle中的依赖,外部依赖
   webpackConfig.externals = {
     vue: 'Vue',
     'vue-router': 'VueRouter',

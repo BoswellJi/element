@@ -27,7 +27,10 @@
     "lint": "eslint src/**/* test/**/* packages/**/* build/**/* --quiet",
     "pub": "npm run bootstrap && sh build/git-release.sh && sh build/release.sh && node build/bin/gen-indices.js",
     "test": "npm run lint && npm run build:theme && cross-env CI_ENV=/dev/ BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "test:watch": "npm run build:theme && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js"
+    "test:watch": "npm run build:theme && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js",
+    "dev:entry": "npm run build:file && cross-env NODE_ENV=development  webpack-dev-server --config build/webpack.demo.js",
+    "build:entry": "npm run build:file && cross-env NODE_ENV=production  webpack --config build/webpack.demo.js",
+    "test:entry": "webpack --config build/webpack.conf.js"
   },
   "faas": [
     {

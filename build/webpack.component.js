@@ -7,19 +7,26 @@ const config = require('./config');
 
 const webpackConfig = {
   mode: 'production',
+  // 多入口
   entry: Components,
+  // 输出
   output: {
+    // 输出路径
     path: path.resolve(process.cwd(), './lib'),
     publicPath: '/dist/',
+    // bundle 名称
     filename: '[name].js',
+    // chunk 名称
     chunkFilename: '[id].js',
-    libraryTarget: 'commonjs2'
+    // 打包成库的模块格式
+    libraryTarget: 'var'
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: config.alias,
     modules: ['node_modules']
   },
+  // 打包时不要打包进bundle的模块
   externals: config.externals,
   performance: {
     hints: false

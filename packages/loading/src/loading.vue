@@ -20,16 +20,25 @@
   export default {
     data() {
       return {
+        // 文本
         text: null,
+        // 自定义加载图标类名
         spinner: null,
+        // 遮罩背景
         background: null,
+        // 全局
         fullscreen: true,
+        // 可见性
         visible: false,
+        // 自定义类名
         customClass: ''
       };
     },
 
     methods: {
+      /**
+       * 触发离开事件
+       */
       handleAfterLeave() {
         this.$emit('after-leave');
       },

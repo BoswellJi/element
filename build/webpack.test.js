@@ -5,7 +5,9 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const config = require('./config');
 
 const webpackConfig = {
+  // webpack加载模式
   mode: 'development',
+  // 模块入口
   entry: {
     app: ['./src/index.js']
   },
@@ -54,14 +56,12 @@ const webpackConfig = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin()
+    // 用webpack插件来解析.vue文件
+    new VueLoaderPlugin(),
+    // 打包进度
+    new ProgressBarPlugin()
   ]
 };
 
-if (!process.env.CI_ENV) {
-  webpackConfig.plugins.push(
-    new ProgressBarPlugin()
-  );
-}
 
 module.exports = webpackConfig;

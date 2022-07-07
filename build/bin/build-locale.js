@@ -2,10 +2,13 @@ var fs = require('fs');
 var save = require('file-save');
 var resolve = require('path').resolve;
 var basename = require('path').basename;
+// 获取src下的locale目录
 var localePath = resolve(__dirname, '../../src/locale/lang');
+// 读取目录下的文件列表
 var fileList = fs.readdirSync(localePath);
 
 var transform = function(filename, name, cb) {
+  // 转换文件
   require('babel-core').transformFile(resolve(localePath, filename), {
     plugins: [
       'add-module-exports',
