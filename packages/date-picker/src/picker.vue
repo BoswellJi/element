@@ -442,6 +442,12 @@ export default {
       if (!valueEquals(val, oldVal) && !this.pickerVisible && this.validateEvent) {
         this.dispatch('ElFormItem', 'el.form.change', val);
       }
+    },
+    defaultTime(val) {
+      const {type} = this;
+      if (this.picker && (type==='daterange' || type==='datetimerange' || type==='monthrange')) {
+        this.picker.defaultTime = val;
+      }
     }
   },
 
